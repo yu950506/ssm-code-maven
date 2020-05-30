@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- todo 要加namespace, 不光有user类有findAll方法，其他的类也有-->
+<mapper namespace="cn.yhs.cn.yhs.learn.dao.AccountDao">
+    <select id="findAll" resultType="cn.yhs.learn.domain.Account">
+        select * from account;
+    </select>
+
+    <select id="findAllAccountUser" resultType="cn.yhs.learn.domain.AccountUser">
+        select a.*,u.username ,u.address from account a ,user u where a.uid = u.id;
+    </select>
+
+    <!--定义resultMap 实现 1对1 结果集的封装-->
+    <resultMap id="accUser" type="cn.yhs.learn.domain.Account">
+        <id property="id" column="aid"></id> <!-- 主键 -->
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+        <!--1:1结果集的映射-->
+        <!--association 是一个值  collection 是一个集合的值-->
+        <association property="user" javaType="cn.yhs.learn.domain.User">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="sex" column="sex"></result>
+            <result property="address" column="address"></result>
+            <result property="birthday" column="birthday"></result>
+        </association>
+    </resultMap>
+
+    <select id="findAllAccountUser2" resultMap="accUser">
+       select a.id aid,a.uid,a.money,u.* from account a ,user u where a.uid = u.id;
+    </select>
+
+</mapper>

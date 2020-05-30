@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhs.learn.dao.UserDao">
+
+    <!--    默认情况下，只启用了本地的会话缓存，它仅仅对一个会话中的数据进行缓存。 要启用全局的二级缓存，只需要在你的 SQL 映射文件中添加一行：-->
+    <cache></cache>
+    <select id="findById" parameterType="int" resultType="cn.yhs.learn.domain.User" useCache="true">
+        select * from user where id = #{id}
+    </select>
+
+
+    <!--    <resultMap id="findAllMap" type="cn.yhs.learn.domain.User">
+            <id column="id" property="id"></id>
+            <result property="username" column="username"></result>
+            <result column="birthday" property="birthday"></result>
+            <result property="sex" column="sex"></result>
+            <result column="address" property="address"></result>
+            <collection property="accountList" ofType="cn.yhs.learn.domain.Account">
+                <id property="id" column="aid"></id>
+                <result property="uid" column="uid"></result>
+                <result property="money" column="money"></result>
+            </collection>
+        </resultMap>
+
+        <select id="findAll" resultMap="findAllMap">
+          select u.*,a.id aid,a.UID,a.MONEY from user u left join account a on u.id = a.UID;
+        </select>-->
+
+    <!--使用延迟加载-->
+    <resultMap id="findAllMap" type="cn.yhs.learn.domain.User">
+        <id column="id" property="id"></id>
+        <result property="username" column="username"></result>
+        <result column="birthday" property="birthday"></result>
+        <result property="sex" column="sex"></result>
+        <result column="address" property="address"></result>
+        <collection property="accountList" select="cn.yhs.learn.dao.AccountDao.findByUid" column="id"></collection>
+    </resultMap>
+    <select id="findAll" resultMap="findAllMap">
+        select * from user;
+    </select>
+
+    <update id="update" parameterType="cn.yhs.learn.domain.User">
+        update user set username = #{username} where id = #{id}
+    </update>
+</mapper>

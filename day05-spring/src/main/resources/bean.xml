@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--
+    <bean id="accountDaoImpl" class="cn.yhs.learn.dao.impl.AccountDaoImpl"></bean>
+
+    <bean class="cn.yhs.learn.service.impl.AccountServiceImpl" id="accountServiceImpl"></bean>
+-->
+
+
+
+    <!-- Spring 创建对象的三种方式：
+    ① 使用默认的无参构造， class ，id 两个属性
+    ②和③ 都是类似于一个对象存在jar 包中，创建对象
+    ② 使用某个类的方法创建对象，并存入容器
+    ③ 使用静态方法创建对象（使用某个类中的静态方法创建对象）
+     -->
+
+
+    <!-- 演示第二种和创建对象的方式-->
+<!--    <bean class="cn.yhs.learn.factory.AccFactory" id="accFactory"></bean>
+    <bean factory-bean="accFactory" factory-method="getAccountServiceImpl"></bean>-->
+
+    <!--演示第三种 使用一个类的静态方法创建对象-->
+<!--<bean class="cn.yhs.learn.factory.StaticAccFactory" factory-method="instance" id="service"></bean>-->
+
+    <!--bean 的作用范围
+        scope
+            singleton 单例的
+                生命周期：随着容器的创建而创建，随着容器的销毁而销毁
+
+            prototype  多例的
+                生命周期：随着容器的创建而创建，但是不随着容易的销毁而关闭，是由java的垃圾回收机制来回收
+    -->
+    <bean  class="cn.yhs.learn.service.impl.AccountServiceImpl" id="accountService" scope="prototype"
+    init-method="init" destroy-method="destroy"
+    ></bean>
+
+
+</beans>

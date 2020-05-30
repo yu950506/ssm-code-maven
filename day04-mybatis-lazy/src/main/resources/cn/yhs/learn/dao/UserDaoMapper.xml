@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhs.cn.yhs.learn.dao.UserDao">
+    <select id="findById" parameterType="int" resultType="cn.yhs.learn.domain.User">
+        select * from user where id = #{id}
+    </select>
+
+
+    <!--    <resultMap id="findAllMap" type="cn.yhs.learn.domain.User">
+            <id column="id" property="id"></id>
+            <result property="username" column="username"></result>
+            <result column="birthday" property="birthday"></result>
+            <result property="sex" column="sex"></result>
+            <result column="address" property="address"></result>
+            <collection property="accountList" ofType="cn.yhs.learn.domain.Account">
+                <id property="id" column="aid"></id>
+                <result property="uid" column="uid"></result>
+                <result property="money" column="money"></result>
+            </collection>
+        </resultMap>
+
+        <select id="findAll" resultMap="findAllMap">
+          select u.*,a.id aid,a.UID,a.MONEY from user u left join account a on u.id = a.UID;
+        </select>-->
+
+    <!--使用延迟加载-->
+    <resultMap id="findAllMap" type="cn.yhs.learn.domain.User">
+        <id column="id" property="id"></id>
+        <result property="username" column="username"></result>
+        <result column="birthday" property="birthday"></result>
+        <result property="sex" column="sex"></result>
+        <result column="address" property="address"></result>
+   <collection property="accountList" select="cn.yhs.cn.yhs.learn.dao.AccountDao.findByUid" column="id"></collection>
+    </resultMap>
+    <select id="findAll" resultMap="findAllMap">
+        select * from user;
+    </select>
+</mapper>

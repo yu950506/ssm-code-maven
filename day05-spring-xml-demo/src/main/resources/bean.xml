@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--使用spring 的xml 配置的案例-->
+    <bean class="cn.yhs.learn.controller.impl.UserControllerImpl" id="userControllerImpl">
+        <property name="userService" ref="userServiceImpl"></property>
+    </bean>
+
+    <bean class="cn.yhs.learn.service.impl.UserServiceImpl" id="userServiceImpl">
+        <property name="userDao" ref="userDaoC3p0"></property>
+    </bean>
+
+    <!-- ====================== Dao层实现方式1：C3P0 和 DBUtils ===================== -->
+    <!--
+        Dao层实现使用的是C3P0连接池和DBUtils组合进行查询
+    -->
+        <bean class="cn.yhs.learn.dao.impl.UserDaoImpl" id="userDaoC3p0">
+            <property name="queryRunner" ref="queryRunner"></property>
+        </bean>
+    <!--
+            QueryRunner里面没有set方法，只能用构造器的方式进行容器管理
+            为了保障每个sql查询的语句都是独立的，这里使用创建多例的对象
+    -->
+        <bean class="org.apache.commons.dbutils.QueryRunner" id="queryRunner" scope="prototype">
+            <constructor-arg name="ds" ref="dataSource"></constructor-arg>
+        </bean>
+
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+            <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+            <property name="jdbcUrl" value="jdbc:mysql:///dm"></property>
+            <property name="user" value="root"></property>
+            <property name="password" value="123456"></property>
+        </bean>
+
+    <!-- ====================== Dao层实现方式2：Spring JDBC 和 Druid ===================== -->
+    <bean class="cn.yhs.learn.dao.impl.UserDaoImplDruid" id="daoImplDruid">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+    <bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+        <constructor-arg name="dataSource" ref="druidDataSource"></constructor-arg>
+    </bean>
+
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="druidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql:///dm"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123456"></property>
+        <property name="maxWait" value="2000"></property>
+        <property name="initialSize" value="10"></property>
+        <property name="maxActive" value="10"></property>
+    </bean>
+
+</beans>

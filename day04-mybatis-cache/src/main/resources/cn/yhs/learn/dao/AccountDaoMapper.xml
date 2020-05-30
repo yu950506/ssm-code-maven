@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhs.learn.dao.AccountDao">
+    <!--编写sql查询语句 1:1-->
+
+    <!--
+      <resultMap id="findAllAccountWithUserMap" type="cn.yhs.learn.domain.Account">
+            <id property="id" column="aid"></id>
+            <result property="uid" column="uid"></result>
+            <result property="money" column="money"></result>
+            &lt;!&ndash;你需要指定目标属性名以及属性的javaType&ndash;&gt;
+             <association property="user" javaType="cn.yhs.learn.domain.User">
+                <id property="id" column="id"></id>
+                <result property="username" column="username"></result>
+                <result property="birthday" column="birthday"></result>
+                <result property="sex" column="sex"></result>
+                <result property="address" column="address"></result>
+            </association>
+        </resultMap>
+        <select id="findAllAccountWithUser" resultMap="findAllAccountWithUserMap">
+         select a.id aid,a.UID,a.MONEY,u.* from account a inner join user u on a.UID = u.id;
+        </select>
+
+    -->
+
+
+    <resultMap id="findAllAccountWithUserMap" type="cn.yhs.learn.domain.Account">
+        <id property="id" column="aid"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+        <!--分析： 有时候我们并不需要用户的信息，所有想着只有用到用户的信息的时候才会去加载 延迟加载 ,在配置文件配置延迟加载参数-->
+        <association property="user" javaType="cn.yhs.learn.domain.User" select="cn.yhs.learn.dao.UserDao.findById"
+                     column="uid"></association>
+    </resultMap>
+    <select id="findAllAccountWithUser" resultMap="findAllAccountWithUserMap">
+    select * from account;
+    </select>
+    
+    <select id="findByUid" resultType="cn.yhs.learn.domain.Account">
+        select * from account where uid = #{uid};
+    </select>
+</mapper>

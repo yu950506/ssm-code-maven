@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhs.cn.yhs.learn.dao.RoleDao">
+    <resultMap id="findRoleWithUserMap" type="cn.yhs.learn.domain.Role">
+        <id property="id" column="rid"></id>
+        <result property="roleName" column="role_name"></result>
+        <result property="roleDesc" column="role_Desc"></result>
+        <collection property="users" ofType="cn.yhs.learn.domain.User">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="birthday" column="birthday"></result>
+            <result property="sex" column="sex"></result>
+            <result property="address" column="address"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findRoleWithUser" resultMap="findRoleWithUserMap">
+        <!-- 多对多的关系，一个角色可以赋给多个用户-->
+        select r.id rid,r.ROLE_DESC,r.ROLE_NAME,u.*
+        from role r left outer join user_role ur on r.id = ur.rid
+        left outer join user u on u.id = ur.uid;
+    </select>
+</mapper>

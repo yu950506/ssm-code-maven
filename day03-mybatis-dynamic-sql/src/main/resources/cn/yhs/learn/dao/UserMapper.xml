@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- todo 要加namespace, 不光有user类有findAll方法，其他的类也有-->
+<mapper namespace="cn.yhs.cn.yhs.learn.dao.UserDao">
+
+    <!--按照条件查询-->
+    <select id="findByCondition" parameterType="cn.yhs.learn.domain.User" resultType="cn.yhs.learn.domain.User">
+        select * from user where 1=1
+        <if test="username != null">
+            and username like #{username}
+        </if>
+        <if test="address != null">
+            and address like #{address}
+        </if>
+    </select>
+
+    <!--按照条件查询的改进-->
+    <!--
+
+        <select id="findByCondition" parameterType="cn.yhs.learn.domain.User" resultType="cn.yhs.learn.domain.User">
+            select * from user
+            <where>
+                <if test="username != null">
+                    username like #{username}
+                </if>
+              &lt;!&ndash;  where 元素只会在子元素返回任何内容的情况下才插入 “WHERE” 子句。而且，若子句的开头为 “AND” 或 “OR”，where 元素也会将它们去除。&ndash;&gt;
+                <if test="address != null">
+                 and address like #{address}
+                </if>
+            </where>
+
+        </select>
+    -->
+
+
+    <!--查询所有-->
+    <select id="findAll" resultType="cn.yhs.learn.domain.User">
+        select * from user;
+    </select>
+
+
+    <!-- 按照范围进行查询，使用foreach-->
+    <!--item 中值要和传递的一致-->
+    <!--select * from user where id in ( ? , ? , ? , ? ) -->
+    <select id="findByIds" resultType="cn.yhs.learn.domain.User">
+        select * from user where
+        id in
+        <foreach collection="list" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <!--批量插入用户-->
+    <!--insert into user(username,sex,birthday,address) values (?,?,?,?) , (?,?,?,?) , (?,?,?,?) , (?,?,?,?) , (?,?,?,?) , (?,?,?,?)-->
+    <insert id="insertAll">
+        insert into user(username,sex,birthday,address) values
+        <foreach collection="list" item="user" separator=",">
+            (#{user.username},#{user.sex},#{user.birthday},#{user.address})
+        </foreach>
+    </insert>
+    <!-- foreach 元素的功能非常强大，它允许你指定一个集合，声明可以在元素体内使用的集合项（item）和索引（index）变量。它也允许你指定开头与结尾的字符串以及集合项迭代之间的分隔符。这个元素也不会错误地添加多余的分隔符，看它多智能！ -->
+    <!--完成批量删除-->
+    <!-- delete from user where id in ( ? , ? , ? , ? , ? , ? ) -->
+    <delete id="deleteAll">
+        delete from user where id in (
+        <foreach collection="list" separator="," item="id">
+            #{id}
+        </foreach>
+        )
+    </delete>
+
+    <!--实现1对多-->
+    <resultMap id="userAccount" type="cn.yhs.learn.domain.User">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="address" column="address"></result>
+        <!--ofType 用于指定集合元素的类型-->
+        <collection property="accounts" ofType="cn.yhs.learn.domain.Account">
+            <id property="id" column="aid"></id>
+            <result property="uid" column="uid"></result>
+            <result property="money" column="money"></result>
+        </collection>
+
+    </resultMap>
+    <select id="findAllUserAccount" resultMap="userAccount">
+        select u.*,a.id aid,a.uid,a.money from user u left join  account a on u.id =a.UID;
+    </select>
+
+</mapper>

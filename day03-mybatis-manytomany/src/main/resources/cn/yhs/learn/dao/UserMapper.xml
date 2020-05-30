@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- todo 要加namespace, 不光有user类有findAll方法，其他的类也有 -->
+<mapper namespace="cn.yhs.cn.yhs.learn.dao.UserDao">
+    <resultMap id="findUserWithRoleMap" type="cn.yhs.learn.domain.User">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="sex" column="sex"></result>
+        <result property="address" column="address"></result>
+        <collection property="roles" ofType="cn.yhs.learn.domain.Role">
+            <id property="id" column="rid"></id>
+            <result property="roleName" column="role_name"></result>
+            <result property="roleDesc" column="role_desc"></result>
+        </collection>
+
+    </resultMap>
+
+    <select id="findUserWithRole" resultMap="findUserWithRoleMap">
+      select u.*,r.id rid,r.ROLE_NAME,r.ROLE_DESC 
+          from user u
+          left outer join user_role ur on u.id = ur.UID
+          left outer join role r on ur.rid = r.id;
+    </select>
+</mapper>

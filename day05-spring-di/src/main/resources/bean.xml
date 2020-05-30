@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--演示通过构造器的方式进行依赖注入-->
+    <bean class="cn.yhs.learn.domian.User" id="user1">
+    <constructor-arg name="age"  value="18"></constructor-arg>
+    <constructor-arg name="birthday" ref="now"></constructor-arg>
+    <constructor-arg name="username" value="喻汉生"></constructor-arg>
+</bean>
+
+
+    <bean id="now" class="java.util.Date"></bean>
+
+    <bean class="cn.yhs.learn.domian.User" id="user"></bean>
+
+
+    <!--演示通过Set的方是进行注入-->
+    <bean class="cn.yhs.learn.domian.Account" id="account">
+        <property name="id" value="123"></property>
+        <property name="name" value="哈哈"></property>
+    </bean>
+
+
+    <!--演示注入集合属性-->
+    <bean class="cn.yhs.learn.domian.Demo" id="demo">
+        <property name="lists">
+            <array>
+                <value>1</value>
+                <value>1</value>
+                <value>1</value>
+            </array>
+        </property>
+
+        <property name="strings">
+            <list>
+                <value>2222</value>
+                <value>2222</value>
+                <value>2222</value>
+            </list>
+        </property>
+        <property name="maps">
+            <props>
+                <prop key="33">3333</prop>
+                <prop key="44">3333</prop>
+                <prop key="44">3333</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

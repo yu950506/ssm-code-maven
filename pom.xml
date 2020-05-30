@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.yhs.learn</groupId>
+    <artifactId>ssm-code-maven</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>day03-mybatis-dynamic-sql</module>
+        <module>day03-mybatis-manytomany</module>
+        <module>day04-mybatis-lazy</module>
+        <module>day04-mybatis-cache</module>
+        <module>day04-mybatis-annotation</module>
+        <module>day05-spring</module>
+        <module>day05-spring-di</module>
+        <module>day06-spring-annotation</module>
+        <module>day05-spring-xml-demo</module>
+        <module>day06-spring-annotation-demo</module>
+        <module>day06-spring-annotation-springjunit</module>
+    </modules>
+    <packaging>pom</packaging>
+    <description>就是一个父工程，免得每次创建模块就需要导入下面这些依赖</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.47</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+    </dependencies>
+
+</project>
