@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean class="cn.yhs.learn.service.impl.AccountServiceImpl" id="accountService"></bean>
+
+    <bean class="cn.yhs.learn.service.util.PrintLog" id="printLog"></bean>
+
+    <!--配置切面-->
+    <aop:config>
+        <!--要添加的功能方法-->
+        <aop:aspect id="log" ref="printLog">
+            <!--配置通用化切入点表达式,他可以配置在<aop:aspet外面，这样就变成了所有切面可用-->
+            <aop:pointcut id="pt1" expression="execution(* cn.yhs.learn.service.impl.*.*(..))"></aop:pointcut>
+            <!--前置通知,方法调用前执行该通知，通常开启事务-->
+            <aop:before method="beforeLog" pointcut-ref="pt1"></aop:before>
+            <!--后置通知，方法执行之后执行行通知，-->
+            <aop:after method="afterLog" pointcut-ref="pt1"></aop:after>
+            <!--异常通知，方法有异常的时候执行通知，一般用于回滚事务-->
+            <aop:after-throwing method="afterThrowingLog"
+                                pointcut-ref="pt1"></aop:after-throwing>
+            <!--异常通知和最终通知只能存在一个，要么提交，要么回滚-->
+            <!--最终通知，提交事务-->
+            <aop:after-returning method="afterReturningLog"
+                                 pointcut-ref="pt1"></aop:after-returning>
+
+            <!--环绕通知：会把业务层的方法覆盖，实际上，环通知没有调用方法而已-->
+            <aop:around method="aroundLog" pointcut-ref="pt1"></aop:around>
+
+            <!--前置通知,方法调用前执行该通知，通常开启事务-->
+            <!--  <aop:before method="beforeLog" pointcut="execution(* cn.yhs.learn.service.impl.*.*(..))"></aop:before>-->
+            <!--后置通知，方法执行之后执行行通知，-->
+            <!--
+                        <aop:after method="afterLog" pointcut="execution(* cn.yhs.learn.service.impl.*.*(..))"></aop:after>
+            -->
+            <!--异常通知，方法有异常的时候执行通知，一般用于回滚事务-->
+            <!--
+                        <aop:after-throwing method="afterThrowingLog"
+                                            pointcut="execution(* cn.yhs.learn.service.impl.*.*(..))"></aop:after-throwing>
+            -->
+            <!--异常通知和最终通知只能存在一个，要么提交，要么回滚-->
+            <!--最终通知，提交事务-->
+            <!--
+                        <aop:after-returning method="afterReturningLog"
+                                             pointcut="execution(* cn.yhs.learn.service.impl.*.*(..))"></aop:after-returning>
+            -->
+        </aop:aspect>
+    </aop:config>
+
+</beans>
