@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <bean class="cn.yhs.learn.util.LogUtils" id="logUtils"></bean>
+    <bean class="cn.yhs.learn.service.impl.AccountServiceImpl" id="accountService"></bean>
+
+    <!--表达式的写法：
+        标准表达式写法：         execution(public void cn.yhs.learn.service.impl.AccountServiceImpl.saveAccount())
+        访问修饰符可以省略：     * void cn.yhs.learn.service.impl.AccountServiceImpl.saveAccount()
+        返回值类型可以使用通配，表示任意返回值： * cn.yhs.learn.service.impl.AccountServiceImpl.saveAccount()
+        包名可以使用通配符： * *.*.*.*.*.AccountServiceImpl.saveAccount()
+        包名通配符的省略：  * *..AccountServiceImpl.saveAccount()
+        类名和方法名可以省略：
+        参数列表可以省略：（..）有无参数都可
+        全通配写法：             * *..*.*(..)
+        全通配不建议写，所有类的方法都回走，一般实际开发中
+         * cn.yhs.learn.service.impl.*.*(..)
+    -->
+
+    <!--aop配置-->
+    <aop:config>
+        <!--配置切面-->
+        <aop:aspect id="log" ref="logUtils">
+            <!--配置通知的类型，并且建立通知方法和切入点方法的关联-->
+            <aop:before method="printLog"
+                        pointcut="execution( * cn.yhs.learn.service.impl.*.*(..))"></aop:before>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
