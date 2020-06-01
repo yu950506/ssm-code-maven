@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--基包扫描-->
+    <context:component-scan base-package="cn.yhs.learn"></context:component-scan>
+    <!--使用${}读取外部配置文件要加的-->
+    <context:property-placeholder location="c3p0.properties"></context:property-placeholder>
+    <!--基于纯代码的方法的事务-->
+    <bean class="cn.yhs.learn.service.impl.AccountServiceImpl" id="accountService">
+        <property name="accountDao" ref="accountDao"></property>
+        <property name="transactionManager" ref="transactionManager"></property>
+    </bean>
+
+    <!--基于动态代理的事务控制-->
+    <bean class="cn.yhs.learn.service.impl2.AccountServiceImpl2" id="accountService2">
+        <property name="accountDao" ref="accountDao"></property>
+    </bean>
+
+    <bean class="cn.yhs.learn.factory.BeanFactory" id="beanFactory">
+        <property name="accountService" ref="accountService2"></property>
+        <property name="transactionManager" ref="transactionManager"></property>
+    </bean>
+
+    <!--动态生成代理对象，这里使用的是使用方法来创建对象-->
+    <bean id="proxyService" factory-bean="beanFactory" factory-method="getAccountService">
+    </bean>
+
+<!--配置dao层-->
+    <bean class="cn.yhs.learn.dao.impl.AccountDaoImpl" id="accountDao">
+        <property name="queryRunner" ref="queryRunner"></property>
+        <property name="connectionUtils" ref="connectionUtils"></property>
+    </bean>
+
+    <bean class="org.apache.commons.dbutils.QueryRunner" id="queryRunner">
+        <constructor-arg name="ds" ref="dataSource"></constructor-arg>
+    </bean>
+
+    <!--配置数据源 多例的-->
+    <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" id="dataSource" scope="prototype">
+        <property name="driverClass" value="${c3p0.jdbc.driverClass}"></property>
+        <property name="jdbcUrl" value="${c3p0.jdbc.jdbcUrl}"></property>
+        <property name="user" value="${c3p0.jdbc.user}"></property>
+        <property name="password" value="${c3p0.jdbc.password}"></property>
+
+    </bean>
+
+    <bean class="cn.yhs.learn.util.ConnectionUtils" id="connectionUtils">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <bean class="cn.yhs.learn.util.TransactionManager" id="transactionManager">
+        <property name="connectionUtils" ref="connectionUtils"></property>
+    </bean>
+
+
+    <bean class="cn.yhs.learn.factory.BeanFactory">
+        <property name="transactionManager" ref="transactionManager"></property>
+        <property name="accountService" ref="accountService2"></property>
+    </bean>
+
+
+</beans>
