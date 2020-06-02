@@ -8,7 +8,7 @@
 
 - c3p0数据库连接池+Dbutils来实现Dao层业务逻辑
 - AOP+线程池(保证dao层都在一个连接中)+事务控制类来实现Service层逻辑控制(重难点)
-- 基于全注解的方式配置和AOP的配置(有BUG)
+- 基于全注解的方式配置和AOP的配置(有BUG，[会在下个项目中使用环绕通知解决](./../day08-spring-annotation-demo2/README.md))
 - Spring和Junit的整合
 
 ### 3.项目主要代码：
