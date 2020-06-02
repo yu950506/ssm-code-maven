@@ -12,3 +12,5 @@
 4. [Sping基于动态代理实现事务控制案例](./day07-spring-xml-proxy/README.md)
 5. [Spring 基于AOP-XML方式实现事务控制案例](./day07-spring-xml-aop/README.md)
 6. [Spring 基于AOP-全注解方式实现事务控制案例](./day07-spring-annotation-demo/README.md)
+7. [Spring 自带的声明式事务控制案例xml配置](./day08-spring-springjdbc-xml/README.md)
+8. [Spring 自带的声明式事务控制案例全注解配置](./day08-spring-springjdbc-annotation/README.md)
