@@ -2,7 +2,7 @@
 
 ## 1.项目介绍
 
-一般我们在业务层都会对事务进行控制操作，前面我们讲解了[基于动态代理的方式](././day07-spring-xml-proxy/README.md)进行事务控制，还讲解了借助S[pring框架的AOP(基于XML配置)](././day07-spring-xml-aop/README.md)来实现对事务的控制，而这个讲解的是Spring框架基于纯注解的方式来实现事务的控制。
+一般我们在业务层都会对事务进行控制操作，前面我们讲解了[基于动态代理的方式](./../day07-spring-xml-proxy/README.md)进行事务控制，还讲解了借助S[pring框架的AOP(基于XML配置)](./../day07-spring-xml-aop/README.md)来实现对事务的控制，而这个讲解的是Spring框架基于纯注解的方式来实现事务的控制。
 
 ## 2.项目主要技术
 
