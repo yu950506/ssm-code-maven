@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--0.配置几包扫描，只扫描@Controller的类-->
+    <context:component-scan base-package="cn.yhs.learn">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"></context:include-filter>
+    </context:component-scan>
+
+    <!--1.配置视图控制器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <!--这里会采用字符串拼接，所有前缀后加 / -->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--0.配置基包扫描，排除带有@Controller的类-->
+    <context:component-scan base-package="cn.yhs.learn">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+
+    <!--1.引入配置文件，配置数据源-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
+        <property name="driverClassName" value="${druid.jdbc.driverClassName}"></property>
+        <property name="url" value="${druid.jdbc.url}"></property>
+        <property name="username" value="${druid.jdbc.username}"></property>
+        <property name="password" value="${druid.jdbc.password}"></property>
+        <property name="initialSize" value="${druid.jdbc.initialSize}"></property>
+        <property name="maxActive" value="${druid.jdbc.maxActive}"></property>
+        <property name="maxWait" value="${druid.jdbc.maxWait}"></property>
+    </bean>
+
+    <!--2. 配置SqlSessionFactoryBean-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--3.配置mapper扫描-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="mapperScannerConfigurer">
+        <property name="basePackage" value="cn.yhs.learn.dao"></property>
+    </bean>
+
+    <!--4.配置数据源事务管理器-->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--5.配置声明式事务-->
+    <tx:advice transaction-manager="transactionManager" id="txAdvice">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="*" read-only="false"></tx:method>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--6.配置aop-->
+    <aop:config>
+        <aop:pointcut id="pt1" expression="execution(* cn.yhs.learn.service.*.*(..))"></aop:pointcut>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt1"></aop:advisor>
+    </aop:config>
+</beans>
